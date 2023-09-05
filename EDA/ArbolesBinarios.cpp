@@ -13,6 +13,9 @@ typedef nodoAB *ab;
 ab consArbol(int, ab, ab);
 int contarElems(ab);
 int contarHojas(ab);
+int altura(ab);
+ab copiar(ab);
+void liberarArbol(ab &);
 
 int main()
 {
@@ -23,8 +26,9 @@ int main()
     ab raiz = consArbol(8, xD, der);
     int elementos = contarElems(raiz);
     int hojas = contarHojas(raiz);
+    int alto = altura(raiz);
 
-    cout << "Elementos: " << elementos << "\nHojas: " << hojas;
+    cout << "Elementos: " << elementos << "\nHojas: " << hojas << "\nAltura: " << alto;
 
     return 0;
 }
@@ -70,4 +74,31 @@ int altura(ab a)
     if (a == NULL)
         return 0;
     return 1 + max(altura(a->izq), altura(a->der));
+}
+
+ab copiar(ab a)
+{
+    if (a == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        ab newArbol = new nodoAB;
+        newArbol->dato = a->dato;
+        newArbol->der = copiar(a->der);
+        newArbol->izq = copiar(a->izq);
+        return newArbol;
+    }
+}
+
+void liberarArbol(ab &a)
+{
+    if (a != NULL)
+    {
+        liberarArbol(a->izq);
+        liberarArbol(a->der);
+        delete a;
+        a = NULL;
+    }
 }
