@@ -140,13 +140,12 @@ void imprimir(Lista L)
     cout << "#";
 }
 
-Lista insComienzo(uint elem, Lista &L)
+Lista insComienzo(uint elem, Lista L)
 {
     Lista nuevo = new nodoLista;
     nuevo->elem = elem;
     nuevo->sig = L;
-    L = nuevo;
-    return L;
+    return nuevo;
 }
 
 Lista merge(Lista L1, Lista L2)
@@ -159,7 +158,7 @@ Lista merge(Lista L1, Lista L2)
     aux->sig = L2;
     return L1;
 }
-// A) i)
+// a) i)
 
 Lista enOrden(AB a)
 {
@@ -170,14 +169,61 @@ Lista enOrden(AB a)
     return merge(enOrden(a->izq), L);
 }
 
+// a) iv)
+bool esCamino(Lista L, AB a)
+{
+    if (a == NULL || L == NULL)
+        return false;
+    if (a->elem != L->elem)
+        return false;
+    if (a->izq == NULL && a->der == NULL)
+        return L->sig == NULL;
+    return esCamino(L->sig, a->izq) || esCamino(L->sig, a->der);
+}
+
+bool mayor(Lista L1, Lista L2)
+{
+    if (L2 == NULL)
+        return true;
+    if (L1 == NULL)
+        return false;
+    return mayor(L1->sig, L2->sig);
+}
+
+Lista camino_mas_largo(AB a)
+{
+    if (a == NULL)
+        return NULL;
+    Lista izq = camino_mas_largo(a->izq);
+    Lista der = camino_mas_largo(a->der);
+    if (mayor(izq, der))
+        return insComienzo(a->elem, izq);
+    else
+        return insComienzo(a->elem, der);
+}
+
 int main()
 {
-    AB izq = consArbol(2, consArbol(1, NULL, NULL), consArbol(3, NULL, NULL));
-    AB der = consArbol(8, consArbol(7, NULL, NULL), consArbol(9, NULL, NULL));
+    AB izq = consArbol(2, consArbol(1, consArbol(0, NULL, NULL), NULL), consArbol(3, NULL, NULL));
+    AB der = consArbol(8, consArbol(7, NULL, NULL), NULL);
     AB raiz = consArbol(6, izq, der);
+
     imprimirElegante(raiz);
     cout << endl;
-    imprimir(enOrden(raiz));
+    Lista L = NULL;
+
+    L = insComienzo(7, L);
+    L = insComienzo(8, L);
+    L = insComienzo(6, L);
+    imprimir(L);
+    cout << endl;
+    if (esCamino(L, raiz))
+        cout << "es camino";
+    else
+        cout << "no es camino";
+
+    L = camino_mas_largo(raiz);
+    imprimir(L);
 
     return 0;
 }
