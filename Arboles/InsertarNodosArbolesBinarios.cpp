@@ -59,7 +59,7 @@ void menu(ab arbol)
             break;
         }
         system("pause");
-        system("clear");
+        system("cls");
     } while (opcion != 3);
 }
 
