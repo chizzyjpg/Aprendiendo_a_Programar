@@ -15,9 +15,11 @@ typedef NodoAB *ab;
 void menu(ab);
 ab crearArbol(int);
 void insertar(ab &, int);
-void mostrarArbol(ab);
+void preOrden(ab);
 void mostrarArbolATS(ab, int);
 bool busqueda(ab, int);
+void enOrden(ab);
+void postOrden(ab);
 
 int main()
 {
@@ -38,8 +40,10 @@ void menu(ab arbol)
         cout << "1. Insertar elemento." << endl;
         cout << "2. Mostrar Arbol." << endl;
         cout << "3. Mostrar Arbol ATS." << endl;
-        cout << "4. Busqueda de 1 dato." << endl;
-        cout << "5. Salir." << endl;
+        cout << "4. Busqueda de un elemento." << endl;
+        cout << "5. Mostrar en orden." << endl;
+        cout << "6. Mostrar en post orden." << endl;
+        cout << "7. Salir." << endl;
         cout << "Opcion: ";
         cin >> opcion;
 
@@ -47,41 +51,57 @@ void menu(ab arbol)
         {
         case 1:
             cout << endl
-                 << "Digite un numero: ";
+                 << "Digite un elemento: ";
             cin >> dato;
             insertar(arbol, dato);
             cout << endl;
+            system("pause");
             break;
         case 2:
-            mostrarArbol(arbol);
+            preOrden(arbol);
+            cout << endl;
+            system("pause");
             break;
         case 3:
             mostrarArbolATS(arbol, 0);
+            system("pause");
             break;
         case 4:
+        {
             cout << endl
-                 << "Digite el numero: ";
+                 << "Digite el elemento: ";
             cin >> dato;
-            bool verdadero = busqueda(arbol, dato);
-            if (verdadero == true)
+            if (busqueda(arbol, dato) == true)
             {
-                cout << "El Numero " << dato << " se encuentra en el Arbol." << endl;
+                cout << "El elemento " << dato << " se encuentra en el Arbol." << endl;
             }
             else
             {
-                cout << "El Numero " << dato << " no se encuentra en el Arbol" << endl;
+                cout << "El elemento " << dato << " no se encuentra en el Arbol" << endl;
             }
+            system("pause");
             break;
+        }
         case 5:
+            enOrden(arbol);
+            system("pause");
+            cout << endl;
+            break;
+        case 6:
+            postOrden(arbol);
+            system("pause");
+            cout << endl;
+            break;
+        case 7:
             cout << "saliendo del programa" << endl;
             break;
         default:
             cout << "Opcion no Valida, Seleccione una valida" << endl;
+            system("pause");
             break;
         }
-        system("pause");
         system("cls");
-    } while (opcion != 5);
+    } while (opcion != 7);
 }
 
 ab crearArbol(int numero)
@@ -114,13 +134,13 @@ void insertar(ab &arbol, int num)
     }
 }
 
-void mostrarArbol(ab arbol)
+void preOrden(ab arbol)
 {
     if (arbol != NULL)
     {
         cout << "|" << arbol->dato << "| ";
-        mostrarArbol(arbol->izq);
-        mostrarArbol(arbol->der);
+        preOrden(arbol->izq);
+        preOrden(arbol->der);
     }
 }
 
@@ -159,4 +179,24 @@ bool busqueda(ab arbol, int numero)
     {
         return false;
     }
+}
+
+void enOrden(ab arbol)
+{
+    if (arbol != NULL)
+    {
+        enOrden(arbol->izq);
+        cout << "|" << arbol->dato << "| ";
+        enOrden(arbol->der);
+    }
+}
+
+void postOrden(ab arbol)
+{
+    if (arbol != NULL)
+    {
+        postOrden(arbol->izq);
+        postOrden(arbol->der);
+        cout << "|" << arbol->dato << "| ";
+        }
 }
