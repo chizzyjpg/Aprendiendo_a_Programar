@@ -142,6 +142,10 @@ void preOrden(ab arbol)
         preOrden(arbol->izq);
         preOrden(arbol->der);
     }
+    else
+    {
+        return;
+    }
 }
 
 void mostrarArbolATS(ab arbol, int cont)
@@ -155,6 +159,10 @@ void mostrarArbolATS(ab arbol, int cont)
         }
         cout << arbol->dato << endl;
         mostrarArbolATS(arbol->izq, cont + 1);
+    }
+    else
+    {
+        return;
     }
 }
 
@@ -189,6 +197,10 @@ void enOrden(ab arbol)
         cout << "|" << arbol->dato << "| ";
         enOrden(arbol->der);
     }
+    else
+    {
+        return;
+    }
 }
 
 void postOrden(ab arbol)
@@ -198,5 +210,9 @@ void postOrden(ab arbol)
         postOrden(arbol->izq);
         postOrden(arbol->der);
         cout << "|" << arbol->dato << "| ";
-        }
+    }
+    else
+    {
+        return;
+    }
 }
