@@ -113,7 +113,7 @@ void mostrarArbol(ab arbol)
 
 bool busqueda(ab arbol, int numero)
 {
-    if (arbol != NULL)
+    /*if (arbol != NULL)
     {
-    }
+    }*/
 }
