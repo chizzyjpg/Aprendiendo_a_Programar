@@ -41,7 +41,6 @@ void menu(ab arbol)
         cout << "5. Salir." << endl;
         cout << "Opcion: ";
         cin >> opcion;
-
         switch (opcion)
         {
         case 1:
