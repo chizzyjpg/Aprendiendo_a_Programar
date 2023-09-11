@@ -16,6 +16,7 @@ void menu(ab);
 ab crearArbol(int);
 void insertar(ab &, int);
 void mostrarArbol(ab);
+void mostrarArbolATS(ab, int);
 bool busqueda(ab, int);
 
 int main()
@@ -41,6 +42,7 @@ void menu(ab arbol)
         cout << "5. Salir." << endl;
         cout << "Opcion: ";
         cin >> opcion;
+
         switch (opcion)
         {
         case 1:
@@ -60,6 +62,15 @@ void menu(ab arbol)
             cout << endl
                  << "Digite el numero: ";
             cin >> dato;
+            bool verdadero = busqueda(arbol, dato);
+            if (verdadero == true)
+            {
+                cout << "El Numero " << dato << " se encuentra en el Arbol." << endl;
+            }
+            else
+            {
+                cout << "El Numero " << dato << " no se encuentra en el Arbol" << endl;
+            }
             break;
         case 5:
             cout << "saliendo del programa" << endl;
@@ -70,7 +81,7 @@ void menu(ab arbol)
         }
         system("pause");
         system("cls");
-    } while (opcion != 3);
+    } while (opcion != 5);
 }
 
 ab crearArbol(int numero)
