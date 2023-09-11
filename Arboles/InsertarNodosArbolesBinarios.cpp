@@ -146,8 +146,14 @@ bool busqueda(ab arbol, int numero)
         {
             return true;
         }
-        busqueda(arbol->izq, numero);
-        busqueda(arbol->der, numero);
+        else if (arbol->dato > numero)
+        {
+            busqueda(arbol->izq, numero);
+        }
+        else
+        {
+            busqueda(arbol->der, numero);
+        }
     }
     else
     {
