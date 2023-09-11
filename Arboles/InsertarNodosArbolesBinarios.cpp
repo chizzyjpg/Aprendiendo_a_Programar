@@ -15,7 +15,7 @@ typedef NodoAB *ab;
 void menu(ab);
 ab crearArbol(int);
 void insertar(ab &, int);
-void mostrarArbol(ab, int);
+void mostrarArbol(ab);
 bool busqueda(ab, int);
 
 int main()
@@ -51,7 +51,7 @@ void menu(ab arbol)
             cout << endl;
             break;
         case 2:
-            mostrarArbol(arbol, 0);
+            mostrarArbol(arbol);
             break;
         case 3:
             cout << endl
@@ -101,17 +101,13 @@ void insertar(ab &arbol, int num)
     }
 }
 
-void mostrarArbol(ab arbol, int cont)
+void mostrarArbol(ab arbol)
 {
     if (arbol != NULL)
     {
-        mostrarArbol(arbol->der, cont + 1);
-        for (int i = 0; i < cont; i++)
-        {
-            cout << "   ";
-        }
-        cout << arbol->dato << endl;
-        mostrarArbol(arbol->izq, cont + 1);
+        cout << "|" << arbol->dato << "| ";
+        mostrarArbol(arbol->izq);
+        mostrarArbol(arbol->der);
     }
 }
 
