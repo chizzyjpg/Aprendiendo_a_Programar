@@ -148,11 +148,11 @@ bool busqueda(ab arbol, int numero)
         }
         else if (arbol->dato > numero)
         {
-            busqueda(arbol->izq, numero);
+            return busqueda(arbol->izq, numero);
         }
         else
         {
-            busqueda(arbol->der, numero);
+            return busqueda(arbol->der, numero);
         }
     }
     else
