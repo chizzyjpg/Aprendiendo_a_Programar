@@ -35,9 +35,10 @@ void menu(ab arbol)
     {
         cout << "\t.:Menu:." << endl;
         cout << "1. Insertar elemento." << endl;
-        cout << "2. Mosrar Arbol." << endl;
-        cout << "3. Busqueda de 1 dato." << endl;
-        cout << "4. Salir." << endl;
+        cout << "2. Mostrar Arbol." << endl;
+        cout << "3. Mostrar Arbol ATS." << endl;
+        cout << "4. Busqueda de 1 dato." << endl;
+        cout << "5. Salir." << endl;
         cout << "Opcion: ";
         cin >> opcion;
 
@@ -54,12 +55,14 @@ void menu(ab arbol)
             mostrarArbol(arbol);
             break;
         case 3:
+            mostrarArbolATS(arbol, 0);
+            break;
+        case 4:
             cout << endl
                  << "Digite el numero: ";
             cin >> dato;
-
             break;
-        case 4:
+        case 5:
             cout << "saliendo del programa" << endl;
             break;
         default:
@@ -111,9 +114,33 @@ void mostrarArbol(ab arbol)
     }
 }
 
+void mostrarArbolATS(ab arbol, int cont)
+{
+    if (arbol != NULL)
+    {
+        mostrarArbolATS(arbol->der, cont + 1);
+        for (int i = 0; i < cont; i++)
+        {
+            cout << "   ";
+        }
+        cout << arbol->dato << endl;
+        mostrarArbolATS(arbol->izq, cont + 1);
+    }
+}
+
 bool busqueda(ab arbol, int numero)
 {
-    /*if (arbol != NULL)
+    if (arbol != NULL)
     {
-    }*/
+        if (arbol->dato == numero)
+        {
+            return true;
+        }
+        busqueda(arbol->izq, numero);
+        busqueda(arbol->der, numero);
+    }
+    else
+    {
+        return false;
+    }
 }
