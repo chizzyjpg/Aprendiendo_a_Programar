@@ -16,6 +16,7 @@ void menu(ab);
 ab crearArbol(int);
 void insertar(ab &, int);
 void mostrarArbol(ab, int);
+bool busqueda(ab, int);
 
 int main()
 {
@@ -35,7 +36,8 @@ void menu(ab arbol)
         cout << "\t.:Menu:." << endl;
         cout << "1. Insertar elemento." << endl;
         cout << "2. Mosrar Arbol." << endl;
-        cout << "3. Salir." << endl;
+        cout << "3. Busqueda de 1 dato." << endl;
+        cout << "4. Salir." << endl;
         cout << "Opcion: ";
         cin >> opcion;
 
@@ -52,6 +54,12 @@ void menu(ab arbol)
             mostrarArbol(arbol, 0);
             break;
         case 3:
+            cout << endl
+                 << "Digite el numero: ";
+            cin >> dato;
+
+            break;
+        case 4:
             cout << "saliendo del programa" << endl;
             break;
         default:
@@ -104,5 +112,12 @@ void mostrarArbol(ab arbol, int cont)
         }
         cout << arbol->dato << endl;
         mostrarArbol(arbol->izq, cont + 1);
+    }
+}
+
+bool busqueda(ab arbol, int numero)
+{
+    if (arbol != NULL)
+    {
     }
 }
