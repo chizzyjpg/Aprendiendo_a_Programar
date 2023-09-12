@@ -444,18 +444,19 @@ void insertar(int p, int h, AG a)
     }
 }
 
-void borrarHoja(AG arbolitodenavidadquelegustaalchepy, uint elnumeritoflipantealquetengoqueborrar)
+void borrar(AG arbolitodenavidadquelegustaalchepy, int elnumeritoflipantealquetengoqueborrar)
 {
-    if (arbolitodenavidadquelegustaalchepy != NULL)
+    if (arbolitodenavidadquelegustaalchepy->pH != NULL)
     {
-        if (arbolitodenavidadquelegustaalchepy->elem == elnumeritoflipantealquetengoqueborrar && arbolitodenavidadquelegustaalchepy->pH == NULL && arbolitodenavidadquelegustaalchepy->sH == NULL)
+        if (arbolitodenavidadquelegustaalchepy->pH->elem == elnumeritoflipantealquetengoqueborrar && arbolitodenavidadquelegustaalchepy->pH->pH == NULL)
         {
-            delete arbolitodenavidadquelegustaalchepy;
+            AG eliminar = arbolitodenavidadquelegustaalchepy->pH;
+            arbolitodenavidadquelegustaalchepy->pH = eliminar->sH;
+            delete eliminar;
+            return;
         }
         else
         {
-            borrarHoja(arbolitodenavidadquelegustaalchepy->pH, elnumeritoflipantealquetengoqueborrar);
-            borrarHoja(arbolitodenavidadquelegustaalchepy->sH, elnumeritoflipantealquetengoqueborrar);
         }
     }
 }
