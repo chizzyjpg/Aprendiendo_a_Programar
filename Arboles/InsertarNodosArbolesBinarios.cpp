@@ -9,17 +9,23 @@ struct NodoAB
     int dato;
     NodoAB *izq;
     NodoAB *der;
+    NodoAB *padre;
 };
 typedef NodoAB *ab;
 
 void menu(ab);
-ab crearArbol(int);
-void insertar(ab &, int);
+ab crearArbol(int, ab);
+void insertar(ab &, int, ab);
 void preOrden(ab);
 void mostrarArbolATS(ab, int);
 bool busqueda(ab, int);
 void enOrden(ab);
 void postOrden(ab);
+void eliminar(ab, int);
+void eliminarElNodo(ab);
+ab minimo(ab);
+void reemplasar(ab, ab);
+void destruirNodo(ab);
 
 int main()
 {
@@ -43,7 +49,8 @@ void menu(ab arbol)
         cout << "4. Busqueda de un elemento." << endl;
         cout << "5. Mostrar en orden." << endl;
         cout << "6. Mostrar en post orden." << endl;
-        cout << "7. Salir." << endl;
+        cout << "7. Borrar un nodo del arbol." << endl;
+        cout << "8. Salir." << endl;
         cout << "Opcion: ";
         cin >> opcion;
 
@@ -53,7 +60,7 @@ void menu(ab arbol)
             cout << endl
                  << "Digite un elemento: ";
             cin >> dato;
-            insertar(arbol, dato);
+            insertar(arbol, dato, NULL);
             cout << endl;
             system("pause");
             break;
@@ -93,6 +100,13 @@ void menu(ab arbol)
             cout << endl;
             break;
         case 7:
+            cout << "Digite el numero a eliminar: ";
+            cin >> dato;
+            eliminar(arbol, dato);
+            cout << endl;
+            system("pause");
+            break;
+        case 8:
             cout << "saliendo del programa" << endl;
             break;
         default:
@@ -101,35 +115,36 @@ void menu(ab arbol)
             break;
         }
         system("cls");
-    } while (opcion != 7);
+    } while (opcion != 8);
 }
 
-ab crearArbol(int numero)
+ab crearArbol(int numero, ab padre)
 {
     ab newNodo = new NodoAB;
 
     newNodo->dato = numero;
     newNodo->der = NULL;
     newNodo->izq = NULL;
+    newNodo->padre = padre;
 
     return newNodo;
 }
 
-void insertar(ab &arbol, int num)
+void insertar(ab &arbol, int num, ab padre)
 {
     if (arbol == NULL)
     {
-        arbol = crearArbol(num);
+        arbol = crearArbol(num, padre);
     }
     else
     {
         if (arbol->dato > num)
         {
-            insertar(arbol->izq, num);
+            insertar(arbol->izq, num, arbol);
         }
         else
         {
-            insertar(arbol->der, num);
+            insertar(arbol->der, num, arbol);
         }
     }
 }
@@ -215,4 +230,91 @@ void postOrden(ab arbol)
     {
         return;
     }
+}
+
+void eliminar(ab arbol, int numero)
+{
+    if (arbol->dato == NULL)
+    {
+        return;
+    }
+    else if (arbol->dato > numero)
+    {
+        eliminar(arbol->izq, numero);
+    }
+    else if (arbol->dato < numero)
+    {
+        eliminar(arbol->der, numero);
+    }
+    else
+    {
+        eliminarElNodo(arbol);
+    }
+}
+
+void eliminarElNodo(ab eliminarNodo)
+{
+    if (eliminarNodo->izq && eliminarNodo->der)
+    {
+        ab menor = minimo(eliminarNodo->der);
+        eliminarNodo->dato = menor->dato;
+        eliminarElNodo(menor);
+    }
+    else if (eliminarNodo->izq)
+    {
+        reemplasar(eliminarNodo, eliminarNodo->izq);
+        destruirNodo(eliminarNodo);
+    }
+    else if (eliminarNodo->der)
+    {
+        reemplasar(eliminarNodo, eliminarNodo->der);
+        destruirNodo(eliminarNodo);
+    }
+    else
+    {
+        reemplasar(eliminarNodo, NULL);
+        destruirNodo(eliminarNodo);
+    }
+}
+
+ab minimo(ab arbol)
+{
+    if (arbol == NULL)
+    {
+        return NULL;
+    }
+    if (arbol->izq)
+    {
+        return minimo(arbol->izq);
+    }
+    else
+    {
+        return arbol;
+    }
+}
+
+void reemplasar(ab nodo, ab nodoAReemplasar)
+{
+    if (nodo->padre)
+    {
+        if (nodo->dato == nodo->padre->izq->dato)
+        {
+            nodo->padre->izq = nodoAReemplasar;
+        }
+        else if (nodo->dato == nodo->padre->der->dato)
+        {
+            nodo->padre->der = nodoAReemplasar;
+        }
+    }
+    if (nodoAReemplasar)
+    {
+        nodoAReemplasar->padre = nodo->padre;
+    }
+}
+
+void destruirNodo(ab nodo)
+{
+    nodo->izq = NULL;
+    nodo->der = NULL;
+    delete nodo;
 }
