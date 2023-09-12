@@ -4,14 +4,19 @@ using namespace std;
 
 typedef unsigned int uint;
 
-struct nodoAB;
-typedef nodoAB *AB;
-
 struct nodoAB
 {
     uint elem;
-    AB izq, der;
+    nodoAB *izq, *der;
 };
+typedef nodoAB *AB;
+
+struct nodoABB
+{
+    uint elem;
+    nodoABB *izq, *der;
+};
+typedef nodoABB *ABB;
 
 struct nodoLista
 {
@@ -20,13 +25,36 @@ struct nodoLista
 };
 typedef nodoLista *Lista;
 
+struct nodoAG
+{
+    int elem;
+    nodoAG *pH;
+    nodoAG *sH;
+};
+typedef nodoAG *AG;
+
+struct EstInfo
+{
+    uint nota; // dato
+    int ci;    // clave
+};
+
+struct nodoABBEstudiantes
+{
+    EstInfo info;
+    nodoABBEstudiantes *izq, *der;
+};
+typedef nodoABBEstudiantes *ABBEstudiantes;
+
+// **************************************************************************
+
 void imprimirAB_enOrden(AB);
 void imprimirNivelK(AB, uint);
 void imprimirElegante(AB);
 uint altura(AB);
 AB copiar(AB);
 
-// *************************************
+// **************************************************************************
 
 void imprimirAB_enOrden(AB a)
 {
@@ -165,8 +193,10 @@ Lista enOrden(AB a)
     if (a == NULL)
         return NULL;
     Lista der = enOrden(a->der);
-    Lista L = insComienzo(a->elem, der);
-    return merge(enOrden(a->izq), L);
+    Lista izq = enOrden(a->izq);
+    der = insComienzo(a->elem, der);
+
+    return merge(izq, der);
 }
 
 // a) iv)
@@ -202,28 +232,235 @@ Lista camino_mas_largo(AB a)
         return insComienzo(a->elem, der);
 }
 
+// b)
+bool esPerfecto(AB a, uint h)
+{
+    if (a == NULL)
+        return h == 0;
+    if (a->izq == NULL && a->der == NULL)
+        return h == 1;
+    if (a->izq == NULL || a->der == NULL)
+        return false;
+    return (h > 1 && esPerfecto(a->izq, h - 1) && esPerfecto(a->der, h - 1));
+}
+
+// EJERCICIO 3 -- ARBOLES BINARIOS DE BÚSQUEDA
+
+void insertarABB(ABB &a, uint x)
+{
+    if (a == NULL)
+    {
+        a = new nodoABB;
+        a->elem = x;
+        a->der = a->izq = NULL;
+        return;
+    }
+    if (x < a->elem)
+        insertarABB(a->izq, x);
+    if (x > a->elem)
+        insertarABB(a->der, x);
+}
+
+bool pertenece(ABB a, uint x)
+{
+    if (a == NULL)
+        return false;
+    if (a->elem == x)
+        return true;
+    if (x < a->elem)
+        return pertenece(a->izq, x);
+    else
+        return pertenece(a->der, x);
+}
+
+bool pertenece_iterativo(ABB a, uint x)
+{
+    while (a != NULL)
+    {
+        if (a->elem == x)
+            return true;
+        if (x < a->elem)
+            a = a->izq;
+        else
+            a = a->der;
+    }
+    return false;
+}
+
+// pre-condición: a no es vacío
+uint maxABB(ABB a)
+{
+    while (a->der != NULL)
+        a = a->der;
+    return a->elem;
+}
+
+// pre-condición: a no es vacío
+void removerMaxABB(ABB &a)
+{
+    if (a->der == NULL)
+    {
+        ABB borrar = a;
+        a = a->izq;
+        delete borrar;
+    }
+    else
+        removerMaxABB(a->der);
+}
+
+// EJERCICIO 4
+
+// SOLUCIÓN FÁCIL
+
+void insertarABBEstudiantes(ABBEstudiantes &a, EstInfo x)
+{
+    if (a == NULL)
+    {
+        a = new nodoABBEstudiantes;
+        a->info = x;
+        a->der = a->izq = NULL;
+        return;
+    }
+    if (x.ci < a->info.ci)
+        insertarABBEstudiantes(a->izq, x);
+    if (x.ci > a->info.ci)
+        insertarABBEstudiantes(a->der, x);
+}
+
+void incluir(ABBEstudiantes a, uint cota, ABBEstudiantes &res)
+{
+    if (a != NULL)
+    {
+        if (a->info.nota > cota)
+        {
+            insertarABBEstudiantes(res, a->info);
+        }
+        incluir(a->izq, cota, res);
+        incluir(a->der, cota, res);
+    }
+}
+
+ABBEstudiantes filtrado_facil(ABBEstudiantes a, uint cota)
+{
+    ABBEstudiantes res = NULL;
+    incluir(a, cota, res);
+    return res;
+}
+
+// SOLUCIÓN TAL COMO LO PIDEN EN LA LETRA
+
+// pre-condición: a no es vacío
+EstInfo maxABBEstudiantes(ABBEstudiantes a)
+{
+    while (a->der != NULL)
+        a = a->der;
+    return a->info;
+}
+
+// pre-condición: a no es vacío
+void removerMaxABBEstudiantes(ABBEstudiantes &a)
+{
+    if (a->der == NULL)
+    {
+        ABBEstudiantes borrar = a;
+        a = a->izq;
+        delete borrar;
+    }
+    else
+        removerMaxABBEstudiantes(a->der);
+}
+
+ABBEstudiantes filtrado(ABBEstudiantes a, uint cota)
+{
+    if (a == NULL)
+        return NULL;
+    ABBEstudiantes res_izq = filtrado(a->izq, cota);
+    ABBEstudiantes res_der = filtrado(a->der, cota);
+    if (a->info.nota > cota)
+    {
+        ABBEstudiantes res = new nodoABBEstudiantes;
+        res->info = a->info;
+        res->izq = res_izq;
+        res->der = res_der;
+        return res;
+    }
+    if (res_izq == NULL)
+        return res_der;
+    EstInfo mayor = maxABBEstudiantes(res_izq);
+    removerMaxABBEstudiantes(res_izq);
+    ABBEstudiantes res = new nodoABBEstudiantes;
+    res->info = mayor;
+    res->izq = res_izq;
+    res->der = res_der;
+    return res;
+}
+
+// EJERCICIO 5 -- ÁRBOLES GENERALES
+
+AG arbolHoja(int x)
+{
+    AG a = new nodoAG;
+    a->elem = x;
+    a->sH = a->pH = NULL;
+    return a;
+}
+
+// pre-condición: a no es vacío
+bool esArbolHoja(AG a)
+{
+    return a->pH == NULL;
+}
+
+// pertenece: Dados un árbol y un entero x, retorna true si y solo si x pertenece al árbol.
+bool pertenece(AG a, int x)
+{
+    if (a == NULL)
+        return false;
+    if (a->elem == x)
+        return true;
+    return pertenece(a->sH, x) || pertenece(a->pH, x);
+}
+
+// pre-condición: a no es vacío
+void insertar(int p, int h, AG a)
+{
+    if (a->elem != h)
+    {
+        if (a->elem == p)
+        {
+            AG nuevo = new nodoAG;
+            nuevo->elem = h;
+            nuevo->pH = NULL;
+            nuevo->sH = a->pH;
+            a->pH = nuevo;
+        }
+        else
+        {
+            if (a->pH != NULL)
+                insertar(p, h, a->pH);
+            if (a->sH != NULL)
+                insertar(p, h, a->sH);
+        }
+    }
+}
+
+void borrarHoja(AG arbolitodenavidadquelegustaalchepy, uint elnumeritoflipantealquetengoqueborrar)
+{
+    if (arbolitodenavidadquelegustaalchepy != NULL)
+    {
+        if (arbolitodenavidadquelegustaalchepy->elem == elnumeritoflipantealquetengoqueborrar && arbolitodenavidadquelegustaalchepy->pH == NULL && arbolitodenavidadquelegustaalchepy->sH == NULL)
+        {
+            delete arbolitodenavidadquelegustaalchepy;
+        }
+        else
+        {
+            borrarHoja(arbolitodenavidadquelegustaalchepy->pH, elnumeritoflipantealquetengoqueborrar);
+            borrarHoja(arbolitodenavidadquelegustaalchepy->sH, elnumeritoflipantealquetengoqueborrar);
+        }
+    }
+}
+
 int main()
 {
-    AB izq = consArbol(2, consArbol(1, consArbol(0, NULL, NULL), NULL), consArbol(3, NULL, NULL));
-    AB der = consArbol(8, consArbol(7, NULL, NULL), NULL);
-    AB raiz = consArbol(6, izq, der);
-
-    imprimirElegante(raiz);
-    cout << endl;
-    Lista L = NULL;
-
-    L = insComienzo(7, L);
-    L = insComienzo(8, L);
-    L = insComienzo(6, L);
-    imprimir(L);
-    cout << endl;
-    if (esCamino(L, raiz))
-        cout << "es camino";
-    else
-        cout << "no es camino";
-
-    L = camino_mas_largo(raiz);
-    imprimir(L);
-
     return 0;
 }
