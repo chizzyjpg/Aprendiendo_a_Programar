@@ -470,8 +470,10 @@ void borrar(AG arbolitodenavidadquelegustaalchepy, int elnumeritoflipantealquete
 // padre
 
 AG buscarPadreLatino(AG Arbolgenialojigodelafamiliadelpapajuancarlostercerodelaolla, int xd)
+{
+}
 
-    int main()
+int main()
 {
     return 0;
 }
