@@ -461,7 +461,17 @@ void borrar(AG arbolitodenavidadquelegustaalchepy, int elnumeritoflipantealquete
     }
 }
 
-int main()
+// Ejercicio 9
+// Considere un árbol general de enteros representado mediante un árbol binario de enteros con la semántica:
+// puntero al primer hijo (pH), puntero al siguiente hermano (sH).
+// Implemente la función AG padre(AG g, int x) que retorne un puntero al nodo padre en g del nodo que
+// tenga a x como dato. Asumimos que g no tiene elementos repetidos. Si x no está en g o si x es la raíz de
+// g, la función padre deberá retornar NULL. No se pueden definir operaciones auxiliares para implementar
+// padre
+
+AG buscarPadreLatino(AG Arbolgenialojigodelafamiliadelpapajuancarlostercerodelaolla, int xd)
+
+    int main()
 {
     return 0;
 }
