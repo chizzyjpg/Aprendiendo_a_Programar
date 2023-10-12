@@ -444,7 +444,59 @@ void insertar(int p, int h, AG a)
     }
 }
 
-void borrar(AG arbolitodenavidadquelegustaalchepy, int elnumeritoflipantealquetengoqueborrar)
+// parte e)
+void borrar(AG a, int x)
+{
+    if (a->elem == x)
+        return; // para evitar recorridas innecesarias si la raiz tiene a x
+    if (a->pH != NULL)
+    {
+        if (a->pH->elem == x)
+        {
+            if (a->pH->pH == NULL)
+            {
+                // es hoja, hay que eliminar
+                AG borrar = a->pH;
+                a->pH = borrar->sH;
+                delete borrar;
+            }
+            return; // ya lo encontré, no puede estar repetido
+        }
+        else
+            borrar(a->pH, x);
+    }
+    if (a->sH != NULL)
+    {
+        if (a->sH->elem == x)
+        {
+            if (a->sH->pH == NULL)
+            {
+                // es hoja, hay que eliminar
+                AG borrar = a->sH;
+                a->sH = borrar->sH;
+                delete borrar;
+            }
+            return; // ya lo encontré, no puede estar repetido
+        }
+        else
+            borrar(a->sH, x);
+    }
+}
+
+// parte f)
+// Procedimiento auxiliar que borra todo para abajo y para la derecha
+void borrarTodo(AG &a)
+{
+    if (a != NULL)
+    {
+        borrarTodo(a->sH);
+        borrarTodo(a->pH);
+        delete a;
+        a = NULL;
+    }
+}
+
+void borrarSub(AG arbolitodenavidadquelegustaalchepy, int elnumeritoflipantealquetengoqueborrar)
 {
     if (arbolitodenavidadquelegustaalchepy->pH != NULL)
     {
@@ -456,9 +508,38 @@ void borrar(AG arbolitodenavidadquelegustaalchepy, int elnumeritoflipantealquete
             return;
         }
         else
-        {
-        }
+
+            borrarSub(arbolitodenavidadquelegustaalchepy->pH, elnumeritoflipantealquetengoqueborrar);
     }
+    if (arbolitodenavidadquelegustaalchepy->sH != NULL)
+    {
+        if (arbolitodenavidadquelegustaalchepy->sH->elem == elnumeritoflipantealquetengoqueborrar)
+        {
+            borrarTodo(arbolitodenavidadquelegustaalchepy->sH->pH); // borra todos los descendientes del nodo a borrar
+            AG eliminar = arbolitodenavidadquelegustaalchepy->sH;   // luego voy a borrar el nodo en cuestión
+            arbolitodenavidadquelegustaalchepy->sH = eliminar->sH;
+            delete eliminar;
+            return; // ya lo encontré, no puede estar repetido
+        }
+        else
+            borrarSub(arbolitodenavidadquelegustaalchepy->sH, elnumeritoflipantealquetengoqueborrar);
+    }
+}
+
+// Ejercicio 6
+AG copiaParcial(AG a, uint x)
+{
+    AG g = new nodoAG;
+    if (x != 0)
+    {
+        if (a->elem != NULL)
+            g->elem = a->elem;
+        if (a->pH != NULL)
+            g->pH = copiaParcial(a->pH, x - 1);
+        if (a->sH != NULL)
+            g->sH = copiaParcial(a->sH, x);
+    }
+    return g;
 }
 
 // Ejercicio 9
@@ -469,8 +550,30 @@ void borrar(AG arbolitodenavidadquelegustaalchepy, int elnumeritoflipantealquete
 // g, la función padre deberá retornar NULL. No se pueden definir operaciones auxiliares para implementar
 // padre
 
-AG buscarPadreLatino(AG Arbolgenialojigodelafamiliadelpapajuancarlostercerodelaolla, int xd)
+/*void imprimirAG(AG g)
 {
+    cout << "|" << g->elem << "| ";
+        if (g->pH != NULL)
+            imprimirAG(g->pH);
+        if (g->sH != NULL)
+            imprimirAG(g->sH);
+}*/
+
+AG padre(AG g, int x)
+{
+    if (g->elem == x && g->pH == NULL)
+        return NULL;
+    AG hijo = g->pH;
+    AG res = NULL;
+    while (hijo != NULL && res == NULL)
+    {
+        if (hijo->elem == x)
+            return g;
+        else
+            res = padre(hijo, x);
+        hijo = hijo->sH;
+    }
+    return res;
 }
 
 int main()
