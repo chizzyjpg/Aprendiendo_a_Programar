@@ -54,12 +54,12 @@ AB cortarArbol(AB &a, int x)
     if (a->info == x)
     {
         temp = a;
-        a = NULL
+        a = NULL;
     }
     else
     {
         temp = cortarArbol(a->izq, x);
-        if ()
+        // if ()
     }
     if (a->izq != NULL && a->izq->info == x)
     {
