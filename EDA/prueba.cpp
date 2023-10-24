@@ -8,29 +8,29 @@ struct nodo
     nodo *sig;
     nodo *ant;
 };
-typedef nodo *listaVacia;
+typedef nodo *lista;
 
-listaVacia crearLista(int);
-void incertarLuego(listaVacia, int);
-void incertarAntes(listaVacia, int);
+lista crearLista(int);
+void incertarLuego(lista, int);
+void incertarAntes(lista, int);
 
 int main()
 {
-    listaVacia li = crearLista(4);
+    lista li = crearLista(4);
     incertarLuego(li, 5);
     incertarAntes(li, 3);
 
     return 0;
 }
 
-listaVacia crearLista(int dato)
+lista crearLista(int dato)
 {
-    listaVacia li = new nodo;
+    lista li = new nodo;
     li->dato = dato;
     return li;
 }
 
-void incertarLuego(listaVacia li, int dato)
+void incertarLuego(lista li, int dato)
 {
     if (li->sig != NULL)
     {
@@ -46,7 +46,7 @@ void incertarLuego(listaVacia li, int dato)
     }
 }
 
-void incertarAntes(listaVacia li, int dato)
+void incertarAntes(lista li, int dato)
 {
     if (li->ant != NULL)
     {
