@@ -8,7 +8,7 @@ void hola(string arr[100], string, char);
 int main()
 {
     string arr[100];
-    string consola = "touch hola.txt";
+    string consola = "touch \"hola\".\"txt\"";
 
     hola(arr, consola, ' ');
 
@@ -17,10 +17,10 @@ int main()
 
     string consolaAux = arr[1];
 
-    hola(arr, consolaAux, '.');
+    hola(arr, consolaAux, '"');
 
-    cout << arr[0] << endl
-         << arr[1];
+    // cout << arr[0] << endl;
+        //  << arr[1];
 }
 
 void hola(string arr[100], string consola, char c)
