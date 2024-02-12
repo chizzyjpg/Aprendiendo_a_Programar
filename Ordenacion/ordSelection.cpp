@@ -2,18 +2,23 @@
 
 using namespace std;
 
-int main(){
+int main()
+{
 
-    int numeros[] = {4,2,5,1,3}, i, j, aux, min;
+    int numeros[] = {4, 2, 5, 1, 3}, i, j, aux, min;
 
-    for ( i = 0 ; i < 5 ; i++){
+    for (i = 0; i < 5; i++)
+    {
         cout << numeros[i] << " ";
     }
 
-    for (i=0; i < 5; i++){
+    for (i = 0; i < 5; i++)
+    {
         min = i;
-        for(j=i+1; j < 5; j++){
-            if (numeros[j] < numeros[min]){
+        for (j = i + 1; j < 5; j++)
+        {
+            if (numeros[j] < numeros[min])
+            {
                 min = j;
             }
         }
@@ -24,10 +29,10 @@ int main(){
 
     cout << endl;
 
-    for ( i = 0 ; i < 5 ; i++){
+    for (i = 0; i < 5; i++)
+    {
         cout << numeros[i] << " ";
     }
 
     return 0;
-
 }
